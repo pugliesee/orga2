@@ -22,6 +22,7 @@ tuit_t **trendingTopic(usuario_t *user, uint8_t (*esTuitSobresaliente)(tuit_t *)
 
     // Si no hay tuits trending topic, devolvemos NULL
     if (cantidad_tuits == 0) return NULL;
+    
     // Caso contrario, pedimos memoria
     tuit_t** tuits = (tuit_t**) malloc((cantidad_tuits + 1) * sizeof(tuit_t*));
 

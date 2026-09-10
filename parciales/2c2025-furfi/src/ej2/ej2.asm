@@ -48,8 +48,7 @@ bloquearUsuario:
     mov r9, [r12 + USUARIO_BLOQUEADOS_OFFSET] ; usuario->bloqueados
     mov [r9 + r8 * 8], r13
 
-    inc r8d
-    mov dword [r12 + USUARIO_CANT_BLOQUEADOS_OFFSET], r8d   ; usuario->cantBloqueados++
+    inc dword [r12 + USUARIO_CANT_BLOQUEADOS_OFFSET]   ; usuario->cantBloqueados++
 
     ; Solo nos queda llamar a la función auxiliar con el feed de cada usuario y el usuario a bloquar/bloqueador
     mov rdi, [r12 + USUARIO_FEED_OFFSET]
@@ -81,9 +80,9 @@ eliminar_publicaciones_del_feed_del_usuario:
     mov r12, rdi    ; Feed
     mov r13, rsi    ; Usuario
 
-    xor r14, r14    ; encontre_nuevo_first
     mov r15, [r12 + FEED_FIRST_OFFSET]  ; actual
     xor rbx, rbx    ; previa
+    xor r14, r14    ; encontre_nuevo_first
 
     .ciclo:
         cmp r15, 0
@@ -129,13 +128,12 @@ eliminar_publicaciones_del_feed_del_usuario:
         jmp .ciclo
 
     .fin:
-        ; Tenemos que ver si encontramos una publicación FIRST o no
-        cmp r14b, byte 0
-        je .sinFeed
-        jmp .epilogo
+    ; Tenemos que ver si encontramos una publicación FIRST o no
+    cmp r14b, byte 0
+    jne .epilogo
 
-        .sinFeed:
-        mov qword [r12 + FEED_FIRST_OFFSET], qword 0
+    ; Sin feed
+    mov qword [r12 + FEED_FIRST_OFFSET], qword 0
 
     .epilogo:
     pop rbx
